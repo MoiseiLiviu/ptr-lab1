@@ -1,31 +1,31 @@
-defmodule MonitoredActor do
+defmodule MonitoringActor do
   def start do
-    spawn_link(__MODULE__, :loop, [])
+    spawn(__MODULE__, :loop, [])
   end
 
   def loop do
-    IO.puts("Starting monitored actor...")
     receive do
-      :die ->
-        IO.puts("Received die message, stopping actor...")
-        :ok
+      {:monitoring, pid} ->
+        IO.puts("Monitoring...")
+        Process.monitor(pid)
+        loop()
+      {:DOWN, _ref, :process, _obj, reason} ->
+        IO.puts("The monitored actor stopped, due to #{reason}.")
     end
   end
 end
 
-defmodule MonitoringActor do
+defmodule MonitoredActor do
   def start do
-    {:ok, pid} = spawn_monitor(MonitoredActor, :start, [])
-    loop(pid)
+    spawn(__MODULE__, :loop, [])
   end
 
-  def loop(pid) do
+  def loop do
     receive do
-      {:DOWN, ref, :process, pid, _reason} ->
-        IO.puts("Monitored actor terminated, notifying...")
-        send(self(), :die)
-        :ok
+      {:stop} ->
+        IO.puts("Monitored actor received stop message")
+        exit(:normal)
     end
-    loop(pid)
+    loop()
   end
 end
