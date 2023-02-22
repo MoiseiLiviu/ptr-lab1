@@ -9,20 +9,12 @@ defmodule Worker do
     GenServer.call(pid, msg)
   end
 
-  def kill(pid) do
-    GenServer.cast(pid, :kill)
-  end
-
   def init(state) do
     {:ok, state}
   end
 
   def handle_call(msg, _from, state) do
     {:reply, msg, state}
-  end
-
-  def handle_cast(:kill, state) do
-    {:stop, :killed, state}
   end
 end
 
