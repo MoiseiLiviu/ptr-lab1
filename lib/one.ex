@@ -2,7 +2,7 @@ alias :math, as: Math
 
 defmodule One do
   def hello() do
-    IO.puts("Hello, PTR!")
+    "Hello, PTR!"
   end
 
   def is_prime?(n) when n < 2 do

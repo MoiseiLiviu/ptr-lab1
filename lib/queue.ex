@@ -7,11 +7,13 @@ defmodule QueueActor do
     receive do
       {:push, item} ->
         new_queue = queue ++ [item]
+        IO.inspect(new_queue)
         loop(new_queue)
       {:pop, pid} ->
         case queue do
           [] -> send(pid, :empty)
           [head | tail] -> send(pid, { :ok, head })
+                           IO.inspect(tail)
                            loop(tail)
         end
     end

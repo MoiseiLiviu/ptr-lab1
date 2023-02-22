@@ -1,6 +1,10 @@
 defmodule OneTest do
   use ExUnit.Case
 
+  test "greets the world" do
+    assert One.hello() == "Hello, PTR!"
+  end
+
   test "is_prime? returns true for primes" do
     assert One.is_prime?(2)
     assert One.is_prime?(3)
